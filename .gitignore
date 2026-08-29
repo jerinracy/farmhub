@@ -1,0 +1,89 @@
+# ==========================================
+# Python Artifacts & Caches
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# ==========================================
+# Django & DRF Specific
+# ==========================================
+# Local development database (SQLite)
+*.sqlite3
+*.db
+
+# Collected static files (Production assets compiled via collectstatic)
+/staticfiles/
+/static_root/
+
+# User-uploaded media files
+/media/
+/media_root/
+
+# Django Rest Framework Browsable API assets (if locally customized)
+.webassets-cache
+
+# ==========================================
+# Environments and Secrets (CRITICAL)
+# ==========================================
+# Environment variables containing sensitive secrets (SECRET_KEY, DB credentials, etc.)
+.env
+.venv
+venv/
+ENV/
+env.bak
+.env.local
+.env.*.local
+
+# ==========================================
+# Testing & Code Quality
+# ==========================================
+.htmlcov/
+.tox/
+.nosetests/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ==========================================
+# Integrated Development Environments (IDEs)
+# ==========================================
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# PyCharm / IntelliJ
+.idea/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+ehthumbs.db
+Thumbs.db
