@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: farmhub_db
+    environment:
+      POSTGRES_DB: farmhub
+      POSTGRES_USER: farmhub_user
+      POSTGRES_PASSWORD: farmhub_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U farmhub_user -d farmhub"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  core:
+    build:
+      context: ./core
+    container_name: farmhub_core
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py seed_superadmin &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./core:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://farmhub_user:farmhub_password@db:5432/farmhub
+      - SECRET_KEY=django-insecure-change-me
+      - DEBUG=True
+      - ALLOWED_HOSTS=localhost,127.0.0.1,core
+    depends_on:
+      db:
+        condition: service_healthy
+
+  reporting:
+    build:
+      context: ./reporting
+    container_name: farmhub_reporting
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8001
+    volumes:
+      - ./reporting:/app
+    ports:
+      - "8001:8001"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://farmhub_user:farmhub_password@db:5432/farmhub
+      - JWT_SECRET_KEY=django-insecure-change-me
+      - JWT_ALGORITHM=HS256
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
